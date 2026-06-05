@@ -47,6 +47,7 @@ export class LocalMultiPlayer extends GameBaseService {
         }
 
         const players: Record<string, Player> = {};
+        let hasAIInRoom = false;
 
         // 解包房间玩家，构建包含虚拟 AI 标签的游戏玩家档案
         for (const p of playerlist) {
@@ -65,7 +66,7 @@ export class LocalMultiPlayer extends GameBaseService {
         let state: MultiGameState;
 
         // 分流解析：根据房间属性决定当前生成的是 AI 对战房间还是纯人类联机房间
-        if (room.AIplayerIds) {
+        if (hasAIInRoom) {
             state = await this.prepareGame(players, "AI" as GameMode, { roomId: room.roomId, hostId: room.hostId, category }) as MultiGameState;
         } else {
             state = await this.prepareGame(players, "MULTIPLAYER", { roomId: room.roomId, hostId: room.hostId, category }) as MultiGameState;
